@@ -24,6 +24,7 @@ public class MedicoController {
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroMedico dados, UriComponentsBuilder uriBuilder) {
+
         var medico = new Medico(dados);
         repository.save(medico);
 
@@ -34,7 +35,9 @@ public class MedicoController {
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemMedico>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
-        var page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new);
+
+        var page = repository.findAllByAtivoTrue(paginacao)
+                .map(DadosListagemMedico::new);
         return ResponseEntity.ok(page);
     }
 
@@ -50,6 +53,7 @@ public class MedicoController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id) {
+
         var medico = repository.getReferenceById(id);
         medico.excluir();
 
@@ -58,6 +62,7 @@ public class MedicoController {
 
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id) {
+
         var medico = repository.getReferenceById(id);
         return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
     }
